@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 
-import { CategoryBar, SearchBar } from "..";
+import { CategoryBar, SearchBar, SearchHistory } from "..";
 
 import styles from "./styles.module.css";
-import useSpotifyApi from "@/effects/useSpotifyApi";
+import { useSpotifyApi } from "@/effects";
 import { useSearch } from "@/contexts";
 
 interface SearchResult {
@@ -40,11 +40,14 @@ export default function SearchArea() {
     setSearchResults,
   } = useSearch();
   const { search } = useSpotifyApi();
+  const [searchHistory, setSearchHistory] = useState<string[]>([]);
 
   const handleSearch = async () => {
     const result = await search(searchQuery, {
       type: selectedCategories?.join(","),
     });
+
+    setSearchHistory((oldHistory) => [...oldHistory, searchQuery]);
 
     setSearchResults(result);
   };
@@ -60,6 +63,10 @@ export default function SearchArea() {
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         handleSearch={handleSearch}
+      />
+      <SearchHistory
+        searchHistory={searchHistory}
+        setSearchHistory={setSearchHistory}
       />
     </div>
   );

@@ -4,12 +4,18 @@
 }
 
 .categoryData {
-  display: flex;
-  flex-wrap: wrap; /* Allows wrapping into multiple rows */
-  gap: 16px; /* Space between cards */
-  justify-content: flex-start;
-}
+  display: grid; /* Use Grid layout */
+  gap: 16px; /* Space between grid items */
+  grid-auto-rows: auto;
 
+  &.tracks {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  &.artists {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
 .searchResultsContainer {
   display: flex;
   flex-direction: column;

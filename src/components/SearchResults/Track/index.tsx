@@ -1,14 +1,22 @@
 import { getFirstValue } from "@/utils";
 import styles from "./styles.module.css";
 export default function Track({ item }) {
+  if (!item) {
+    console.log("+++item", item);
+    return null;
+  }
+
   return (
-    <div key={item.id} className={styles.trackContainer}>
+    <div className={styles.trackContainer}>
       <div className={styles.coverArtContainer}>
         <img
-          src={item.album.images[0].url}
-          alt={item.album.name}
-          width={item?.album?.images[2]?.width}
-          height={item?.album?.images[2]?.height}
+          className={styles.coverArt}
+          src={item?.album?.images[0]?.url}
+          alt={item?.album?.name}
+          // width={item?.album?.images[2]?.width}
+          // height={item?.album?.images[2]?.height}
+          width={120}
+          height={120}
         />
       </div>
 
@@ -16,8 +24,9 @@ export default function Track({ item }) {
         <h3 className={styles.trackName}>{item.name}</h3>
         <div className={styles.albumInfo}>
           <h4 className={styles.artistName}>
-            {item.artists.map((artist) => artist.name).join(", ")}
+            {item?.artists?.map((artist) => artist.name).join(", ")}
           </h4>
+          <span className={styles.divider}>•</span>
           <p className={styles.albumReleaseDate}>
             {getFirstValue(item?.album?.release_date)}
           </p>

@@ -21,6 +21,27 @@ export interface SearchResult {
       };
     }[];
   };
+  albums: {
+    items: {
+      name: string;
+      images: { url: string; height: number; width: number }[];
+      release_date: string;
+      total_tracks: number;
+    }[];
+  };
+  playlists: {
+    items: {
+      name: string;
+      images: { url: string; height: number; width: number }[];
+      owner: {
+        display_name: string;
+      };
+      description: string;
+      tracks: {
+        total: number;
+      };
+    }[];
+  };
 }
 
 const useSpotifyApi = () => {
@@ -32,11 +53,13 @@ const useSpotifyApi = () => {
     const {
       artists: { items: artistItems = [] } = { items: [] },
       tracks: { items: trackItems = [] } = { items: [] },
+      albums: { items: albumItems = [] } = { items: [] },
+      playlists: { items: playlistItems = [] } = { items: [] },
     } = results;
 
     const normalizedResults = {
       artists: {
-        items: artistItems.map(({ images = [], name = "", genres = [] }) => ({
+        items: artistItems?.map(({ images = [], name = "", genres = [] }) => ({
           images: images.map(({ url = "", height = 0, width = 0 }) => ({
             url,
             height,
@@ -47,7 +70,7 @@ const useSpotifyApi = () => {
         })),
       },
       tracks: {
-        items: trackItems.map(({ name = "", artists = [], album = {} }) => ({
+        items: trackItems?.map(({ name = "", artists = [], album = {} }) => ({
           name,
           artists: artists.map(({ name = "" }) => ({ name })),
           album: {
@@ -63,6 +86,39 @@ const useSpotifyApi = () => {
           },
         })),
       },
+      albums: {
+        items: albumItems?.map(
+          ({
+            name = "",
+            images = [],
+            release_date = "",
+            total_tracks = 0,
+          }) => ({
+            name,
+            images: images.map(({ url = "", height = 0, width = 0 }) => ({
+              url,
+              height,
+              width,
+            })),
+            release_date: release_date || "",
+            total_tracks: total_tracks || 0,
+          })
+        ),
+      },
+      // playlists: {
+      //   items:
+      //     playlistItems
+      //       ?.filter((item) => !!item)
+      //       .map(({ name = "", images = [], owner = {} }) => ({
+      //         name,
+      //         images: images.map(({ url = "", height = 0, width = 0 }) => ({
+      //           url,
+      //           height,
+      //           width,
+      //         })),
+      //         owner: owner.display_name || "",
+      //       })) || [],
+      // },
     };
     console.log("+++", normalizedResults);
     return normalizedResults;

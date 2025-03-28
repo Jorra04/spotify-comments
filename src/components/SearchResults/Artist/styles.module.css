@@ -1,22 +1,7 @@
-.trackContainer {
-  background-color: #ffffff1a;
-  padding: 16px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 120px; /* Ensure items don't grow beyond 200px */
-  width: 100%; /* Let items use available space up to max-width */
-  margin: 0 auto;
-
-  .coverArtContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    .coverArt {
-      border-radius: 8px;
-    }
-  }
+.coverArt {
+  border-radius: 16px;
 }
+
 .trackInfo {
   display: flex;
   flex-direction: column;
@@ -38,11 +23,6 @@
     align-items: center;
     gap: 8px;
 
-    .divider {
-      margin: 8px 0 0;
-      color: white;
-    }
-
     .artistName {
       font-size: 12px;
       color: #b3b3b3;
@@ -50,12 +30,6 @@
       white-space: nowrap; /* Prevents wrapping */
       overflow: hidden; /* Hides overflow content */
       text-overflow: ellipsis; /* Adds ellipsis to overflow */
-    }
-
-    .albumReleaseDate {
-      font-size: 12px;
-      color: #b3b3b3;
-      margin: 8px 0 0;
     }
   }
 }

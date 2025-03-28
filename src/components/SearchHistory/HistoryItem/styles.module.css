@@ -1,0 +1,17 @@
+.historyItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-radius: 16px;
+  background-color: #ffffff1a;
+
+  .title {
+    font-size: 14px;
+    color: white;
+  }
+
+  .removeButton {
+    cursor: pointer;
+  }
+}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useSpotify } from "@/contexts";
-import useSpotifyApi from "@/effects/useSpotifyApi";
+import { useSpotifyApi } from "@/effects";
 
 import styles from "./styles.module.css";
 
