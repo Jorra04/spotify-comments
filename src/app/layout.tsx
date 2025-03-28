@@ -1,5 +1,6 @@
 import { SpotifyProvider } from "@/contexts";
 import "./styles.module.css";
+import "../styles/global.module.css";
 
 import { DM_Sans } from "next/font/google";
 
