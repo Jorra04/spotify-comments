@@ -1,5 +1,5 @@
 .trackContainer {
-  background-color: #ffffff1a;
+  background-color: var(--spotify-light-gray);
   padding: 16px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -24,7 +24,7 @@
   .trackName {
     font-size: 14px;
     font-weight: 600;
-    color: white;
+    color: var(--white);
     line-height: 1;
     margin: 8px 0 0;
 
@@ -40,12 +40,12 @@
 
     .divider {
       margin: 8px 0 0;
-      color: white;
+      color: var(--white);
     }
 
     .artistName {
       font-size: 12px;
-      color: #b3b3b3;
+      color: var(--spotify-gray);
       margin: 8px 0 0;
       white-space: nowrap; /* Prevents wrapping */
       overflow: hidden; /* Hides overflow content */
@@ -54,7 +54,7 @@
 
     .albumReleaseDate {
       font-size: 12px;
-      color: #b3b3b3;
+      color: var(--spotify-gray);
       margin: 8px 0 0;
     }
   }

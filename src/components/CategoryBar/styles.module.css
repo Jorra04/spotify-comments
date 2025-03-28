@@ -9,7 +9,7 @@
   padding: 10px 20px;
   border: none;
   border-radius: 20px;
-  background-color: #ffffff1a;
+  background-color: var(--spotify-light-gray);
   color: white;
   cursor: pointer;
   transition: background-color 0.2s ease;
@@ -20,5 +20,5 @@
 }
 
 .categoryButton.selected {
-  background-color: #1ed760;
+  background-color: var(--spotify-green);
 }

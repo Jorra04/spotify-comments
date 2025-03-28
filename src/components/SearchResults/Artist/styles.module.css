@@ -9,7 +9,7 @@
   .trackName {
     font-size: 14px;
     font-weight: 600;
-    color: white;
+    color: var(--white);
     line-height: 1;
     margin: 8px 0 0;
 
@@ -25,7 +25,7 @@
 
     .artistName {
       font-size: 12px;
-      color: #b3b3b3;
+      color: var(--spotify-gray);
       margin: 8px 0 0;
       white-space: nowrap; /* Prevents wrapping */
       overflow: hidden; /* Hides overflow content */

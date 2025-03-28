@@ -11,7 +11,9 @@
   border: none; /* Remove the border */
   border-radius: 12px;
   flex: 0.8;
-  background-color: #ffffff1a; /* Add this to maintain visual distinction */
+  background-color: var(
+    --spotify-light-gray
+  ); /* Add this to maintain visual distinction */
   color: white; /* Add this to ensure text is visible */
   outline: none; /* Remove the focus outline */
 }
@@ -20,7 +22,9 @@
   padding: 15px;
   border: none;
   border-radius: 12px;
-  background-color: #ffffff1a; /* Add this to maintain visual distinction */
+  background-color: var(
+    --spotify-light-gray
+  ); /* Add this to maintain visual distinction */
   color: white; /* Add this to ensure text is visible */
   flex: 0.2; /* Takes up remaining 30% of the space */
 }

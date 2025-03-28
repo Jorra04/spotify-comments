@@ -1,6 +1,6 @@
 .searchContainer {
   display: flex;
-  background-color: #121212;
+  background-color: var(--spotify-dark-gray);
   flex-direction: column;
   padding: 20px;
   border-radius: 16px;

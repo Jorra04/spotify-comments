@@ -4,11 +4,11 @@
   align-items: center;
   padding: 10px;
   border-radius: 16px;
-  background-color: #ffffff1a;
+  background-color: var(--spotify-light-gray);
 
   .title {
     font-size: 14px;
-    color: white;
+    color: var(--white);
   }
 
   .removeButton {
