@@ -1,0 +1,22 @@
+.title,
+.categoryTitle {
+  color: white;
+}
+
+.categoryData {
+  display: flex;
+  flex-wrap: wrap; /* Allows wrapping into multiple rows */
+  gap: 16px; /* Space between cards */
+  justify-content: flex-start;
+}
+
+.searchResultsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  background-color: #121212;
+  border-radius: 16px;
+  padding: 20px;
+  overflow-y: auto;
+}

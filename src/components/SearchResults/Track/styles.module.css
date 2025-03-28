@@ -1,0 +1,45 @@
+.trackContainer {
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff1a;
+  padding: 16px;
+  border-radius: 16px;
+
+  flex: 1 1 calc(25% - 12px); /* 4 cards per row, accounting for the gap */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  .coverArtContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+.trackInfo {
+  display: flex;
+  flex-direction: column;
+
+  .trackName {
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    line-height: 1;
+    margin: 8px 0 0;
+  }
+
+  .albumInfo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    .artistName {
+      font-size: 12px;
+      color: #b3b3b3;
+      margin: 8px 0 0;
+    }
+
+    .albumReleaseDate {
+      font-size: 12px;
+      color: #b3b3b3;
+      margin: 8px 0 0;
+    }
+  }
+}

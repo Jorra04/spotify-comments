@@ -1,0 +1,11 @@
+.searchContainer {
+  display: flex;
+  background-color: #121212;
+  flex-direction: column;
+  padding: 20px;
+  border-radius: 16px;
+}
+
+.title {
+  color: white;
+}

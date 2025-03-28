@@ -1,0 +1,24 @@
+.categoryBar {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  padding-left: 0;
+}
+
+.categoryButton {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  background-color: #ffffff1a;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.categoryButton:hover {
+  opacity: 0.9;
+}
+
+.categoryButton.selected {
+  background-color: #1ed760;
+}
