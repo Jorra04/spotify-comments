@@ -1,0 +1,9 @@
+.playbackContainer {
+  background-color: var(--spotify-dark-gray);
+  border-radius: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+}

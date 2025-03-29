@@ -1,4 +1,3 @@
-import { Trash2 } from "lucide";
 import styles from "./styles.module.css";
 import { X } from "lucide-react";
 
