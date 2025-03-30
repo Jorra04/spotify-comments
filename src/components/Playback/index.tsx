@@ -1,3 +1,4 @@
+"use client";
 import cx from "classnames";
 import styles from "./styles.module.css";
 import { useEffect, useState, useRef } from "react";

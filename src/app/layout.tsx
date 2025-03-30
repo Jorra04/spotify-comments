@@ -9,6 +9,12 @@ const dmSans = DM_Sans({
   weight: ["400", "500", "700"],
 });
 
+export const metadata: Metadata = {
+  icons: {
+    icon: [{ url: "/favicon.svg" }],
+  },
+};
+
 export default async function RootLayout({
   children,
 }: {
@@ -32,6 +38,7 @@ export default async function RootLayout({
     <html lang="en">
       <head>
         <title>Spotify Comments</title>
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
       </head>
       <body className={dmSans.className}>
         <SpotifyProvider bearerToken={bearerToken}>{children}</SpotifyProvider>

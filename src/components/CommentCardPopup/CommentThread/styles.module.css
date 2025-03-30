@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+  width: 100%;
+  background: #121212;
+  border-radius: 16px;
+}
+
+.tray {
+  overflow: hidden;
+}
+
+.subComponentWrapper {
+  padding-left: 32px;
+}

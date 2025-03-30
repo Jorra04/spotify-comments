@@ -1,0 +1,41 @@
+.hero {
+  display: flex;
+  align-items: center;
+  border-radius: 25px;
+  padding: 24px;
+  height: 100%;
+  background-color: var(--spotify-dark-gray-2);
+  gap: 32px;
+}
+
+.descriptionContainer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .descriptionTextContainer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .title {
+    color: var(--spotify-white);
+    font-size: 65px;
+    margin: 0;
+
+    .titleSpan {
+      color: var(--spotify-green);
+    }
+  }
+
+  .description {
+    color: var(--spotify-gray);
+    font-size: 24px;
+    font-weight: 300;
+  }
+}
