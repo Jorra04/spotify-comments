@@ -14,7 +14,7 @@ export default function Header() {
         </Link>
       </div>
       <nav className={styles.nav}>
-        <Link href="/signup">
+        <Link href="https://www.spotify.com/us/signup">
           <button className={styles.button}>Sign up</button>
         </Link>
         <Link href="/api/auth">

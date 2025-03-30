@@ -11,37 +11,29 @@ const albumSvgs = [
   "/assets/albums/ledZeppelin_4.png",
 ];
 
-// const albumColors = [
-//   "#d0efff", // Abbey Road - bluish
-//   "#E94B3C", // Born to Run - reddish
-//   "#23074D", // Dark Side - deep purple
-//   "#CAA846", // Hotel California - golden
-//   "#D3756B", // Led Zeppelin - warm orange
-// ];
-const albumColors = [
-  "#d0efff", // Abbey Road - bluish
-  "#faff89", // Born to Run - reddish
-  "#ffffff", // Dark Side - deep purple
-  "#ffaf6b", // Hotel California - golden
-  "#e8ffdc", // Led Zeppelin - warm orange
-];
-
 export default function AlbumCarousel() {
   const [albums, setAlbums] = useState(albumSvgs);
-  const [currentIndex, setCurrentIndex] = useState(4);
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [animate, setAnimate] = useState(false);
+
+  const handleSwipe = () => {
+    setAlbums((prev) => [...prev.slice(1), prev[0]]);
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setIsAnimating(true);
-      setAlbums((prev) => [...prev.slice(1), prev[0]]);
+      handleSwipe();
+    }, 5000);
+
+    const animateTimeout = setTimeout(() => {
+      setAnimate(true);
     }, 3000);
 
     // Cleanup function
     return () => {
       clearInterval(interval);
+      clearTimeout(animateTimeout);
     };
-  }, [isAnimating]); // Note: removed currentIndex from dependencies
+  }, []); // Note: removed currentIndex from dependencies
 
   return (
     <div className={styles.carousel}>
@@ -51,7 +43,7 @@ export default function AlbumCarousel() {
           src={src}
           alt={`Album ${index + 1}`}
           className={cx(styles.album, {
-            [styles.swiping]: index === 0 && isAnimating,
+            [styles.swiping]: index === 0 && animate,
           })}
           style={{ zIndex: albums.length - index }}
         />

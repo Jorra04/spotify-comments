@@ -7,7 +7,8 @@ import Comment from "../Comment";
 const initialComments = [
   {
     author: "John Doe",
-    content: "I haven't heard this song in years!",
+    content:
+      "Man, I wish I could have been at one of their concerts in the '70s! 🎤✨",
     timeAgo: "10 minutes ago",
     reactions: [
       {
@@ -15,14 +16,15 @@ const initialComments = [
         count: 10,
       },
       {
-        icon: "👎",
+        icon: "🎸",
         count: 5,
       },
     ],
   },
   {
     author: "Jane Smith",
-    content: "This is a reply",
+    content:
+      "Right? Those shows were pure magic! The energy must have been insane! 🔥",
     timeAgo: "5 minutes ago",
     reactions: [
       {
@@ -37,7 +39,7 @@ const initialComments = [
   },
 ];
 
-const possibleReactions = ["👍", "👆🏽", "❤️", "😂", "🎧", "💯"];
+const possibleReactions = ["👍", "👆🏽", "❤️", "😂", "🎧", "💯", "🎸", "🎤"];
 export default function CommentThread() {
   const [isOpen, setIsOpen] = useState(false);
   const [comments, setComments] = useState(initialComments);
