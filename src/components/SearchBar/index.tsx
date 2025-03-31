@@ -31,7 +31,7 @@ export default function SearchBar() {
       type: selectedCategories?.join(","),
     });
 
-    const newHistory = [...searchHistory, searchQuery];
+    const newHistory = [...searchHistory, { searchQuery, result }];
     setSearchHistory(newHistory);
 
     setSearchResults(result);

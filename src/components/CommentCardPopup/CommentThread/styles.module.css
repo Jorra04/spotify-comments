@@ -4,7 +4,7 @@
   gap: 16px;
   padding: 20px;
   width: 100%;
-  background: #121212;
+  background: var(--spotify-dark-gray);
   border-radius: 16px;
 }
 

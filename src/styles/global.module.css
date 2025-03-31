@@ -1,12 +1,15 @@
 :root {
   --spotify-green: #1ed760;
+  --spotify-green-hover: #0d7833;
   --spotify-black: #191414;
   --spotify-white: #ffffff;
   --spotify-gray: #b3b3b3;
   --spotify-dark-gray: #121212;
   --spotify-light-gray: #ffffff1a;
+  --spotify-light-gray-btn-outline: #818181;
   --spotify-dark-gray-2: #1f1f1f;
   --spotify-hover-gray: #2a2a2a;
   --spotify-error-red: #e91429;
   --white: #ffffff;
+  --black: #000000;
 }

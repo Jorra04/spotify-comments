@@ -1,3 +1,10 @@
+.historyItemBtn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
 .historyItem {
   display: flex;
   justify-content: space-between;
@@ -5,6 +12,12 @@
   padding: 10px;
   border-radius: 16px;
   background-color: var(--spotify-light-gray);
+
+  &:hover {
+    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.2);
+    background-color: var(--spotify-green-hover);
+    transition: all 0.3s ease;
+  }
 
   .title {
     font-size: 14px;

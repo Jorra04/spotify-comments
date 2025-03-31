@@ -4,7 +4,7 @@
   align-items: center;
   padding: 0 2rem 1rem;
   background-color: transparent;
-  background-color: #000000;
+  background-color: var(--black);
 }
 
 .logoContainer {
@@ -27,9 +27,9 @@
 
 .button {
   padding: 10px 20px;
-  border: 1px solid #818181;
+  border: 1px solid var(--spotify-light-gray-btn-outline);
   border-radius: 20px;
-  background-color: #000000;
+  background-color: var(--black);
   font-size: 16px;
   font-weight: bold;
   color: white;

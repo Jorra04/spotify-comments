@@ -12,16 +12,19 @@ export default function SearchHistory() {
   );
 
   const removeSearchHistory = (search: string) => {
-    const newHistory = searchHistory.filter((item) => item !== search);
+    const newHistory = searchHistory.filter(
+      (item) => item.searchQuery !== search
+    );
     setSearchHistory(newHistory);
   };
 
   return (
     <div className={styles.searchHistory}>
-      {searchHistory.map((search, index) => (
+      {searchHistory.map(({ searchQuery, result }, index) => (
         <HistoryItem
           key={`search-${index}`}
-          search={search}
+          search={searchQuery}
+          result={result}
           removeSearchHistory={removeSearchHistory}
         />
       ))}
