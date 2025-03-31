@@ -5,19 +5,37 @@ import { useSpotifyApi } from "@/effects";
 
 import styles from "./styles.module.css";
 import { useCallback } from "react";
+import { useSearchHistoryStore, useSearchStore } from "@/stores";
+import { useShallow } from "zustand/shallow";
 
-interface SearchProps {
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
-  handleSearch: () => void;
-}
-
-export default function SearchBar({
-  searchQuery,
-  setSearchQuery,
-  handleSearch,
-}: SearchProps) {
+export default function SearchBar() {
   const { search } = useSpotifyApi();
+
+  const { searchHistory, setSearchHistory } = useSearchHistoryStore(
+    useShallow((state) => ({
+      searchHistory: state.searchHistory,
+      setSearchHistory: state.setSearchHistory,
+    }))
+  );
+
+  const {
+    searchQuery,
+    setSearchQuery,
+    selectedCategories,
+    setSelectedCategories,
+    setSearchResults,
+  } = useSearchStore(useShallow((state) => state));
+
+  const handleSearch = async () => {
+    const result = await search(searchQuery, {
+      type: selectedCategories?.join(","),
+    });
+
+    const newHistory = [...searchHistory, searchQuery];
+    setSearchHistory(newHistory);
+
+    setSearchResults(result);
+  };
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {

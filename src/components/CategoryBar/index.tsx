@@ -6,16 +6,14 @@ import cx from "classnames";
 import { capitalize } from "@/utils";
 
 import styles from "./styles.module.css";
+import { useSearchStore } from "@/stores";
+import { useShallow } from "zustand/shallow";
+import { CATEGORIES } from "@/constants";
 
-type CategoryBarProps = {
-  selectedCategories: string[];
-  setSelectedCategories: (categories: string[]) => void;
-};
-
-export default function CategoryBar({
-  selectedCategories,
-  setSelectedCategories,
-}: CategoryBarProps) {
+export default function CategoryBar() {
+  const { selectedCategories, setSelectedCategories } = useSearchStore(
+    useShallow((state) => state)
+  );
   const handleCategoryClick = (category: string = "") => {
     if (selectedCategories.includes(category)) {
       // Only remove if there would still be at least one category selected
@@ -30,7 +28,7 @@ export default function CategoryBar({
 
   return (
     <div className={styles.categoryBar}>
-      {["track", "album", "artist", "playlist"].map((category) => (
+      {CATEGORIES.map((category) => (
         <button
           key={category}
           className={cx(styles.categoryButton, {

@@ -5,13 +5,18 @@ import Track from "./Track";
 import Artist from "./Artist";
 import cx from "classnames";
 import { useMemo } from "react";
+import { useSearchStore } from "@/stores";
+import { useShallow } from "zustand/shallow";
 export default function SearchResults() {
   const resultMap = {
     track: "tracks",
     artist: "artists",
     album: "albums",
   };
-  const { selectedCategories, searchResults, searchQuery } = useSearch();
+
+  const { selectedCategories, searchResults, searchQuery } = useSearchStore(
+    useShallow((state) => state)
+  );
 
   const getSearchResultJSX = (category, item, index) => {
     if (category === "track") {
@@ -43,7 +48,7 @@ export default function SearchResults() {
                 [styles.artists]: category === "artist",
               })}
             >
-              {searchResults[resultMap[category]].items.map((item, index) => {
+              {searchResults[resultMap[category]]?.items.map((item, index) => {
                 return getSearchResultJSX(category, item, index);
               })}
             </div>

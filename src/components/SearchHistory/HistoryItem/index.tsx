@@ -3,17 +3,15 @@ import { X } from "lucide-react";
 
 interface HistoryItemProps {
   search: string;
-  setSearchHistory: (searchHistory: string[]) => void;
+  removeSearchHistory: (search: string) => void;
 }
 
 export default function HistoryItem({
   search,
-  setSearchHistory,
+  removeSearchHistory,
 }: HistoryItemProps) {
   const handleRemoveItem = () => {
-    setSearchHistory((oldHistory) =>
-      oldHistory.filter((item) => item !== search)
-    );
+    removeSearchHistory(search);
   };
   return (
     <div className={styles.historyItem}>
