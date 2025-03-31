@@ -139,7 +139,54 @@ export default function Playback({ accessToken }: PlaybackProps) {
     return () => clearInterval(intervalId);
   }, [isPaused]);
 
-  const handlePlaySong = async (trackUri: string = "") => {
+  const handleResumeSong = async () => {
+    if (!player) {
+      console.error("+++ Player is not available yet.");
+      return;
+    }
+
+    if (!uri) {
+      console.error("+++ No track URI found.");
+      return;
+    }
+
+    const playerState = await player.getCurrentState();
+    console.log("+++ Player state:", playerState);
+    if (!playerState) {
+      console.log("+++ No player state found, playing track:", uri);
+      handlePlaySong();
+      return;
+    }
+
+    try {
+      console.log(`+++ Resuming track: on device ${deviceId}`);
+      player?.resume().then((success) => {
+        console.log("+++ Resume successful:", success);
+        setIsPaused(false);
+      });
+    } catch (error) {
+      console.error("+++ Error resuming track:", error);
+    }
+  };
+
+  const handlePausePlayback = async () => {
+    if (!player) {
+      console.error("+++ Player is not available yet.");
+      return;
+    }
+
+    try {
+      console.log(`+++ Pausing playback on device ${deviceId}`);
+      player?.pause().then((success) => {
+        console.log("+++ Pause successful:", success);
+        setIsPaused(true);
+      });
+    } catch (error) {
+      console.error("+++ Error pausing playback:", error);
+    }
+  };
+
+  const handlePlaySong = async () => {
     if (!deviceId) {
       console.error("+++ Device ID is not available yet.");
       return;
@@ -147,9 +194,9 @@ export default function Playback({ accessToken }: PlaybackProps) {
     setIsPaused(false);
 
     try {
-      console.log(`+++ Playing track: ${trackUri} on device ${deviceId}`);
+      console.log(`+++ Playing track: ${uri} on device ${deviceId}`);
 
-      const response = await playSong(trackUri, deviceId, accessToken);
+      const response = await playSong(uri, deviceId, accessToken);
 
       if (!response.ok) {
         const error = await response.json();
@@ -159,28 +206,6 @@ export default function Playback({ accessToken }: PlaybackProps) {
       }
     } catch (error) {
       console.error("+++ Error playing track:", error);
-    }
-  };
-
-  const handlePauseSong = async () => {
-    if (!deviceId) {
-      console.error("+++ Device ID is not available yet.");
-      return;
-    }
-    setIsPaused(true);
-
-    try {
-      console.log(`+++ Pausing track on device ${deviceId}`);
-
-      const response = await pauseSong(deviceId, accessToken);
-      if (!response.ok) {
-        const error = await response.json();
-        console.error("+++ Failed to pause track:", error);
-      } else {
-        console.log("+++ Track is paused!");
-      }
-    } catch (error) {
-      console.error("+++ Error pausing track:", error);
     }
   };
 
@@ -206,12 +231,17 @@ export default function Playback({ accessToken }: PlaybackProps) {
   );
 
   useEffect(() => {
-    if (uri && deviceId && !isPaused) {
-      console.log("+++ Selected song changed, playing new track:", uri);
-      handlePlaySong(uri);
-      setIsPaused(false); // Update pause state since we're starting playback
+    if (uri && deviceId) {
+      player?.getCurrentState().then((state) => {
+        if (!state) {
+          return;
+        }
+        console.log("+++ Selected song changed, playing new track:", uri);
+        handlePlaySong();
+        setIsPaused(false); // Update pause state since we're starting playback
+      });
     }
-  }, [uri, deviceId, isPaused]);
+  }, [uri, deviceId]);
 
   return (
     <div className={styles.playbackContainer}>
@@ -222,9 +252,9 @@ export default function Playback({ accessToken }: PlaybackProps) {
         <div className={styles.playbackControls}>
           <SkipBack color="white" onClick={() => player?.previousTrack()} />
           {isPaused ? (
-            <Play color="white" onClick={() => handlePlaySong(uri)} />
+            <Play color="white" onClick={() => handleResumeSong()} />
           ) : (
-            <Pause color="white" onClick={() => handlePauseSong(uri)} />
+            <Pause color="white" onClick={() => handlePausePlayback()} />
           )}
           <SkipForward color="white" onClick={() => player?.nextTrack()} />
         </div>
