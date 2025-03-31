@@ -142,7 +142,44 @@ const useSpotifyApi = () => {
     return normalizeSearchResults(data);
   };
 
-  return { search };
+  const playSong = async (
+    trackUri: string,
+    deviceId: string,
+    accessToken: string
+  ) => {
+    const response = await fetch(
+      `${baseUrl}/me/player/play?device_id=${deviceId}`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uris: [trackUri],
+        }),
+      }
+    );
+
+    return response;
+  };
+
+  const pauseSong = async (deviceId: string, accessToken: string) => {
+    const response = await fetch(
+      `${baseUrl}/me/player/pause?device_id=${deviceId}`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return response;
+  };
+
+  return { search, playSong, pauseSong };
 };
 
 export default useSpotifyApi;

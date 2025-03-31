@@ -1,0 +1,41 @@
+.nowPlaying {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nowPlayingImage {
+  height: 50px;
+  width: 50px;
+  border-radius: 8px;
+}
+
+.nowPlayingInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.nowPlayingTitle {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.nowPlayingArtist {
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+
+.nowPlayingTitleText {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  color: white;
+}
+
+.nowPlayingArtistText {
+  font-size: 0.875rem;
+  font-weight: 400;
+  margin: 0;
+  color: white;
+}

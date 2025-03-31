@@ -5,7 +5,8 @@ import { useEffect, useState, useRef } from "react";
 import { Play, Pause, SkipForward, SkipBack } from "lucide-react";
 import { usePlayback } from "@/contexts";
 import { loadSpotifyPlayer } from "@/utils";
-
+import NowPlaying from "./NowPlaying";
+import { useSpotifyApi } from "@/effects";
 type PlaybackProps = {
   accessToken: string;
 };
@@ -25,6 +26,7 @@ export default function Playback({ accessToken }: PlaybackProps) {
   const [deviceId, setDeviceId] = useState<string | null>(null);
 
   const { selectedSong } = usePlayback();
+  const { playSong, pauseSong } = useSpotifyApi();
 
   const initializePlayer = async () => {
     if (!window.Spotify) {
@@ -94,29 +96,17 @@ export default function Playback({ accessToken }: PlaybackProps) {
     };
   }, [accessToken]);
 
-  const handlePlayback = async (trackUri: string = "") => {
+  const handlePlaySong = async (trackUri: string = "") => {
     if (!deviceId) {
       console.error("+++ Device ID is not available yet.");
       return;
     }
-
-    const action = isPaused ? "play" : "pause";
-    const url = `https://api.spotify.com/v1/me/player/${action}?device_id=${deviceId}`;
-    setIsPaused(!isPaused);
+    setIsPaused(false);
 
     try {
       console.log(`+++ Playing track: ${trackUri} on device ${deviceId}`);
 
-      const response = await fetch(url, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          uris: [trackUri],
-        }),
-      });
+      const response = await playSong(trackUri, deviceId, accessToken);
 
       if (!response.ok) {
         const error = await response.json();
@@ -129,15 +119,59 @@ export default function Playback({ accessToken }: PlaybackProps) {
     }
   };
 
+  const handlePauseSong = async () => {
+    if (!deviceId) {
+      console.error("+++ Device ID is not available yet.");
+      return;
+    }
+    setIsPaused(true);
+
+    try {
+      console.log(`+++ Pausing track on device ${deviceId}`);
+
+      const response = await pauseSong(deviceId, accessToken);
+      if (!response.ok) {
+        const error = await response.json();
+        console.error("+++ Failed to pause track:", error);
+      } else {
+        console.log("+++ Track is paused!");
+      }
+    } catch (error) {
+      console.error("+++ Error pausing track:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedSong && deviceId) {
+      console.log(
+        "+++ Selected song changed, playing new track:",
+        selectedSong
+      );
+      handlePlaySong(selectedSong);
+      setIsPaused(false); // Update pause state since we're starting playback
+    }
+  }, [selectedSong, deviceId]);
+
   return (
     <div className={styles.playbackContainer}>
-      <SkipBack color="white" onClick={() => player?.previousTrack()} />
-      {isPaused ? (
-        <Play color="white" onClick={() => handlePlayback(selectedSong)} />
-      ) : (
-        <Pause color="white" onClick={() => handlePlayback(selectedSong)} />
-      )}
-      <SkipForward color="white" onClick={() => player?.nextTrack()} />
+      <div className={styles.nowPlayingContainer}>
+        <NowPlaying
+          albumArtPath={
+            "https://i.scdn.co/image/ab67616d0000b27390a50cfe99a4c19ff3cbfbdb"
+          }
+          title={"Stairway to Heaven"}
+          artist={"Led Zeppelin"}
+        />
+      </div>
+      <div className={styles.playbackControls}>
+        <SkipBack color="white" onClick={() => player?.previousTrack()} />
+        {isPaused ? (
+          <Play color="white" onClick={() => handlePlaySong(selectedSong)} />
+        ) : (
+          <Pause color="white" onClick={() => handlePauseSong(selectedSong)} />
+        )}
+        <SkipForward color="white" onClick={() => player?.nextTrack()} />
+      </div>
     </div>
   );
 }

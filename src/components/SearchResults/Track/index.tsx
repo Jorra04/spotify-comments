@@ -7,10 +7,19 @@ export default function Track({ item }) {
     return null;
   }
 
-  const { setSelectedSong } = usePlayback();
+  const { setSelectedSong, setSelectedSongImage, setTitle, setArtist } =
+    usePlayback();
+
+  const imagePath =
+    item?.album?.images[0]?.url || "/assets/albumPlaceholder.svg";
+  const artistName = item?.artists?.map((artist) => artist.name).join(", ");
+  const trackName = item?.name;
 
   const handleTrackSelection = () => {
     setSelectedSong(item?.uri);
+    setSelectedSongImage(imagePath);
+    setTitle(trackName);
+    setArtist(artistName);
   };
 
   return (
@@ -24,7 +33,7 @@ export default function Track({ item }) {
         <div className={styles.coverArtContainer}>
           <img
             className={styles.coverArt}
-            src={item?.album?.images[0]?.url}
+            src={imagePath || null}
             alt={item?.album?.name}
             width={120}
             height={120}
@@ -32,11 +41,9 @@ export default function Track({ item }) {
         </div>
 
         <div className={styles.trackInfo}>
-          <h3 className={styles.trackName}>{item.name}</h3>
+          <h3 className={styles.trackName}>{trackName}</h3>
           <div className={styles.albumInfo}>
-            <h4 className={styles.artistName}>
-              {item?.artists?.map((artist) => artist.name).join(", ")}
-            </h4>
+            <h4 className={styles.artistName}>{artistName}</h4>
             <span className={styles.divider}>•</span>
             <p className={styles.albumReleaseDate}>
               {getFirstValue(item?.album?.release_date)}
