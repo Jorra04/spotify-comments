@@ -1,3 +1,12 @@
+.trackButton {
+  background: none;
+  border: none;
+  padding: 0;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
 .trackContainer {
   background-color: var(--spotify-light-gray);
   padding: 16px;

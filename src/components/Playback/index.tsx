@@ -3,7 +3,7 @@ import cx from "classnames";
 import styles from "./styles.module.css";
 import { useEffect, useState, useRef } from "react";
 import { Play, Pause, SkipForward, SkipBack } from "lucide-react";
-
+import { usePlayback } from "@/contexts";
 import { loadSpotifyPlayer } from "@/utils";
 
 type PlaybackProps = {
@@ -23,6 +23,8 @@ export default function Playback({ accessToken }: PlaybackProps) {
   const [player, setPlayer] = useState<Spotify.Player | null>(null);
   const tokenRef = useRef<string | null>(null); // Store the latest token reference
   const [deviceId, setDeviceId] = useState<string | null>(null);
+
+  const { selectedSong } = usePlayback();
 
   const initializePlayer = async () => {
     if (!window.Spotify) {
@@ -92,9 +94,7 @@ export default function Playback({ accessToken }: PlaybackProps) {
     };
   }, [accessToken]);
 
-  const handlePlayback = async (
-    trackUri: string = "spotify:track:1Yk0cQdMLx5RzzFTYwmuld"
-  ) => {
+  const handlePlayback = async (trackUri: string = "") => {
     if (!deviceId) {
       console.error("+++ Device ID is not available yet.");
       return;
@@ -133,9 +133,9 @@ export default function Playback({ accessToken }: PlaybackProps) {
     <div className={styles.playbackContainer}>
       <SkipBack color="white" onClick={() => player?.previousTrack()} />
       {isPaused ? (
-        <Play color="white" onClick={() => handlePlayback()} />
+        <Play color="white" onClick={() => handlePlayback(selectedSong)} />
       ) : (
-        <Pause color="white" onClick={() => handlePlayback()} />
+        <Pause color="white" onClick={() => handlePlayback(selectedSong)} />
       )}
       <SkipForward color="white" onClick={() => player?.nextTrack()} />
     </div>

@@ -1,5 +1,5 @@
 "use client";
-import { SearchProvider } from "@/contexts";
+import { SearchProvider, PlaybackProvider } from "@/contexts";
 import { Search, SearchArea, SearchResults, Playback } from "../../components";
 import styles from "./styles.module.css";
 import { useEffect, useState } from "react";
@@ -16,15 +16,17 @@ export default function Page() {
   }, [searchParams]);
   return (
     <SearchProvider>
-      <div className={styles.homeContainer}>
-        <div className={styles.searchContainer}>
-          <SearchArea />
-          <SearchResults />
+      <PlaybackProvider>
+        <div className={styles.homeContainer}>
+          <div className={styles.searchContainer}>
+            <SearchArea />
+            <SearchResults />
+          </div>
+          <div className={styles.playbackContainer}>
+            <Playback accessToken={accessToken} />
+          </div>
         </div>
-        <div className={styles.playbackContainer}>
-          <Playback accessToken={accessToken} />
-        </div>
-      </div>
+      </PlaybackProvider>
     </SearchProvider>
   );
 }

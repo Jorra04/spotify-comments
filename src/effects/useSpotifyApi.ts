@@ -19,6 +19,7 @@ export interface SearchResult {
         images: { url: string; height: number; width: number }[];
         release_date: string;
       };
+      uri: string;
     }[];
   };
   albums: {
@@ -70,21 +71,24 @@ const useSpotifyApi = () => {
         })),
       },
       tracks: {
-        items: trackItems?.map(({ name = "", artists = [], album = {} }) => ({
-          name,
-          artists: artists.map(({ name = "" }) => ({ name })),
-          album: {
-            name: album.name || "",
-            images: (album.images || []).map(
-              ({ url = "", height = 0, width = 0 }) => ({
-                url,
-                height,
-                width,
-              })
-            ),
-            release_date: album.release_date || "",
-          },
-        })),
+        items: trackItems?.map(
+          ({ name = "", artists = [], album = {}, uri = "" }) => ({
+            name,
+            artists: artists.map(({ name = "" }) => ({ name })),
+            album: {
+              name: album.name || "",
+              images: (album.images || []).map(
+                ({ url = "", height = 0, width = 0 }) => ({
+                  url,
+                  height,
+                  width,
+                })
+              ),
+              release_date: album.release_date || "",
+            },
+            uri,
+          })
+        ),
       },
       albums: {
         items: albumItems?.map(
