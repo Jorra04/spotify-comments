@@ -4,6 +4,7 @@ import { useSpotify } from "@/contexts";
 import { useSpotifyApi } from "@/effects";
 
 import styles from "./styles.module.css";
+import { useCallback } from "react";
 
 interface SearchProps {
   searchQuery: string;
@@ -18,6 +19,15 @@ export default function SearchBar({
 }: SearchProps) {
   const { search } = useSpotifyApi();
 
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Enter") {
+        handleSearch();
+      }
+    },
+    [handleSearch]
+  );
+
   return (
     <div className={styles.container}>
       <input
@@ -25,6 +35,7 @@ export default function SearchBar({
         type="text"
         placeholder="Search"
         onChange={(e) => setSearchQuery(e.target.value)}
+        onKeyDown={handleKeyDown}
       />
       <button className={styles.searchButton} onClick={handleSearch}>
         Search

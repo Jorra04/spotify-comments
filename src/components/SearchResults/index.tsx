@@ -4,13 +4,14 @@ import styles from "./styles.module.css";
 import Track from "./Track";
 import Artist from "./Artist";
 import cx from "classnames";
+import { useMemo } from "react";
 export default function SearchResults() {
   const resultMap = {
     track: "tracks",
     artist: "artists",
     album: "albums",
   };
-  const { selectedCategories, searchResults } = useSearch();
+  const { selectedCategories, searchResults, searchQuery } = useSearch();
 
   const getSearchResultJSX = (category, item, index) => {
     if (category === "track") {
@@ -20,9 +21,16 @@ export default function SearchResults() {
     }
   };
 
+  const getSearchResultsTitle = useMemo(() => {
+    if (searchQuery) {
+      return `Search results for "${searchQuery}"`;
+    }
+    return "Search results";
+  }, [searchQuery]);
+
   return (
     <div className={styles.searchResultsContainer}>
-      <h1 className={styles.title}>Search results</h1>
+      <h1 className={styles.title}>{getSearchResultsTitle}</h1>
       {searchResults &&
         selectedCategories.map((category) => (
           <div key={category}>
