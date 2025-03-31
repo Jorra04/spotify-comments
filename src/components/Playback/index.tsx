@@ -1,12 +1,25 @@
 "use client";
 import cx from "classnames";
 import styles from "./styles.module.css";
-import { useEffect, useState, useRef } from "react";
-import { Play, Pause, SkipForward, SkipBack } from "lucide-react";
+import { useEffect, useState, useRef, useMemo } from "react";
+import { useShallow } from "zustand/shallow";
+import {
+  Play,
+  Pause,
+  SkipForward,
+  SkipBack,
+  MicVocal,
+  MonitorSpeaker,
+  ListMusic,
+  Volume2,
+} from "lucide-react";
 import { usePlayback } from "@/contexts";
 import { loadSpotifyPlayer } from "@/utils";
+import { VOLUME_MIN, VOLUME_MAX, VOLUME_DEFAULT } from "@/constants";
 import NowPlaying from "./NowPlaying";
 import { useSpotifyApi } from "@/effects";
+import { millisToFormattedTime } from "@/utils/millisToFormattedTime";
+import { useCurrentTrackStore } from "@/stores";
 type PlaybackProps = {
   accessToken: string;
 };
@@ -24,35 +37,53 @@ export default function Playback({ accessToken }: PlaybackProps) {
   const [player, setPlayer] = useState<Spotify.Player | null>(null);
   const tokenRef = useRef<string | null>(null); // Store the latest token reference
   const [deviceId, setDeviceId] = useState<string | null>(null);
-
-  const { selectedSong } = usePlayback();
+  const [currentTime, setCurrentTime] = useState(0);
+  const [volume, setVolume] = useState(VOLUME_DEFAULT);
+  const [duration, setDuration] = useState(0);
   const { playSong, pauseSong } = useSpotifyApi();
+
+  const { albumArt, title, artist, uri } = useCurrentTrackStore(
+    useShallow((state) => ({
+      albumArt: state.currentTrack?.albumArt,
+      title: state.currentTrack?.title,
+      artist: state.currentTrack?.artist,
+      uri: state.currentTrack?.uri,
+    }))
+  );
 
   const initializePlayer = async () => {
     if (!window.Spotify) {
-      console.error("+++ Spotify SDK not loaded yet.");
+      // console.error("+++ Spotify SDK not loaded yet.");
       return;
     }
 
     console.log("+++ Initializing player with token:", tokenRef.current);
 
     const tempPlayer = new window.Spotify.Player({
-      name: "Web Playback SDK",
+      name: "Spotify Comments",
       getOAuthToken: (cb) => {
         const token = tokenRef.current;
         console.log("+++ Providing OAuth token:", token);
         cb(token ?? ""); // Fallback to empty string if null
       },
-      volume: 0.5,
+      volume: VOLUME_DEFAULT / 100,
+    });
+
+    tempPlayer.getVolume().then((volume) => {
+      let volume_percentage = volume * 100;
+      setVolume(volume_percentage);
     });
 
     tempPlayer.addListener("ready", ({ device_id }) => {
       console.log("+++ Player Ready with Device ID:", device_id);
       setDeviceId(device_id);
+      setIsPaused(true);
     });
 
     tempPlayer.addListener("player_state_changed", (state) => {
       console.log("+++ Player state changed:", state);
+      setCurrentTime(state?.position ?? 0);
+      setDuration(state?.duration ?? 0);
       setIsPaused(state?.paused ?? true);
     });
 
@@ -95,6 +126,18 @@ export default function Playback({ accessToken }: PlaybackProps) {
       player?.disconnect();
     };
   }, [accessToken]);
+
+  useEffect(() => {
+    // Initialize the interval
+    const intervalId = setInterval(() => {
+      if (!isPaused) {
+        setCurrentTime((prevCurrentTime) => prevCurrentTime + 1000);
+      }
+    }, 1000);
+
+    // Cleanup function to clear the interval when the component unmounts
+    return () => clearInterval(intervalId);
+  }, [isPaused]);
 
   const handlePlaySong = async (trackUri: string = "") => {
     if (!deviceId) {
@@ -141,36 +184,76 @@ export default function Playback({ accessToken }: PlaybackProps) {
     }
   };
 
+  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTime = parseInt(e.target.value);
+    player?.seek(newTime);
+  };
+
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newVolume = parseInt(e.target.value);
+    player?.setVolume(newVolume / 100);
+    setVolume(newVolume);
+  };
+
+  const formattedCurrentTime = useMemo(
+    () => millisToFormattedTime(currentTime),
+    [currentTime]
+  );
+
+  const formattedDuration = useMemo(
+    () => millisToFormattedTime(duration),
+    [duration]
+  );
+
   useEffect(() => {
-    if (selectedSong && deviceId) {
-      console.log(
-        "+++ Selected song changed, playing new track:",
-        selectedSong
-      );
-      handlePlaySong(selectedSong);
+    if (uri && deviceId && !isPaused) {
+      console.log("+++ Selected song changed, playing new track:", uri);
+      handlePlaySong(uri);
       setIsPaused(false); // Update pause state since we're starting playback
     }
-  }, [selectedSong, deviceId]);
+  }, [uri, deviceId, isPaused]);
 
   return (
     <div className={styles.playbackContainer}>
       <div className={styles.nowPlayingContainer}>
-        <NowPlaying
-          albumArtPath={
-            "https://i.scdn.co/image/ab67616d0000b27390a50cfe99a4c19ff3cbfbdb"
-          }
-          title={"Stairway to Heaven"}
-          artist={"Led Zeppelin"}
-        />
+        <NowPlaying albumArtPath={albumArt} title={title} artist={artist} />
       </div>
-      <div className={styles.playbackControls}>
-        <SkipBack color="white" onClick={() => player?.previousTrack()} />
-        {isPaused ? (
-          <Play color="white" onClick={() => handlePlaySong(selectedSong)} />
-        ) : (
-          <Pause color="white" onClick={() => handlePauseSong(selectedSong)} />
-        )}
-        <SkipForward color="white" onClick={() => player?.nextTrack()} />
+      <div className={styles.playbackControlsContainer}>
+        <div className={styles.playbackControls}>
+          <SkipBack color="white" onClick={() => player?.previousTrack()} />
+          {isPaused ? (
+            <Play color="white" onClick={() => handlePlaySong(uri)} />
+          ) : (
+            <Pause color="white" onClick={() => handlePauseSong(uri)} />
+          )}
+          <SkipForward color="white" onClick={() => player?.nextTrack()} />
+        </div>
+        <div className={styles.playbackTimeContainer}>
+          <span className={styles.playbackTime}>{formattedCurrentTime}</span>
+          <input
+            type="range"
+            min="0"
+            max={duration}
+            value={currentTime}
+            onChange={handleSeek}
+            className={styles.playbackSeek}
+          />
+          <span className={styles.playbackTime}>{formattedDuration}</span>
+        </div>
+      </div>
+      <div className={styles.audioPlaybackContainer}>
+        <MicVocal color="white" />
+        <ListMusic color="white" />
+        <MonitorSpeaker color="white" />
+        <Volume2 color="white" />
+        <input
+          type="range"
+          min={VOLUME_MIN}
+          max={VOLUME_MAX}
+          value={volume}
+          onChange={handleVolumeChange}
+          className={styles.volumeSlider}
+        />
       </div>
     </div>
   );

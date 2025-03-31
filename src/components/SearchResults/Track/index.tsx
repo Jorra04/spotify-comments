@@ -1,14 +1,17 @@
+"use client";
+import { useShallow } from "zustand/shallow";
 import { getFirstValue } from "@/utils";
 import styles from "./styles.module.css";
 import { usePlayback } from "@/contexts";
+import { useCurrentTrackStore } from "@/stores";
 export default function Track({ item }) {
   if (!item) {
     console.log("+++item", item);
     return null;
   }
-
-  const { setSelectedSong, setSelectedSongImage, setTitle, setArtist } =
-    usePlayback();
+  const setCurrentTrack = useCurrentTrackStore(
+    useShallow((state) => state.setCurrentTrack)
+  );
 
   const imagePath =
     item?.album?.images[0]?.url || "/assets/albumPlaceholder.svg";
@@ -16,10 +19,12 @@ export default function Track({ item }) {
   const trackName = item?.name;
 
   const handleTrackSelection = () => {
-    setSelectedSong(item?.uri);
-    setSelectedSongImage(imagePath);
-    setTitle(trackName);
-    setArtist(artistName);
+    setCurrentTrack({
+      uri: item?.uri,
+      albumArt: imagePath,
+      title: trackName,
+      artist: artistName,
+    });
   };
 
   return (

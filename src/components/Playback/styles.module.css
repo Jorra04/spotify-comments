@@ -3,13 +3,43 @@
   border-radius: 16px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 16px;
 }
 
 .playbackControls {
-  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 16px;
+}
+
+.playbackControlsContainer {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .playbackTimeContainer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+
+    .playbackTime {
+      color: var(--spotify-white);
+    }
+
+    .playbackSeek {
+      width: 100%;
+    }
+  }
+}
+
+.audioPlaybackContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
   gap: 16px;
 }

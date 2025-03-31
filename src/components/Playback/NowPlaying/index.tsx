@@ -1,13 +1,22 @@
 import Image from "next/image";
 import styles from "./styles.module.css";
-import { usePlayback } from "@/contexts";
 import { ALBUM_PLACEHOLDER_IMAGE } from "@/constants";
-export default function NowPlaying() {
-  const { selectedSongImage, title, artist } = usePlayback();
+
+export type NowPlayingProps = {
+  albumArtPath: string;
+  title: string;
+  artist: string;
+};
+
+export default function NowPlaying({
+  albumArtPath = "",
+  title,
+  artist,
+}: NowPlayingProps) {
   return (
     <div className={styles.nowPlaying}>
       <img
-        src={selectedSongImage || ALBUM_PLACEHOLDER_IMAGE}
+        src={albumArtPath || ALBUM_PLACEHOLDER_IMAGE}
         alt="Now Playing"
         width={40}
         height={40}
