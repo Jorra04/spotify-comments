@@ -9,6 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/cache": "^11.14.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/material": "^7.0.1",
+    "@mui/material-nextjs": "^7.0.0",
     "classnames": "^2.5.1",
     "framer-motion": "^12.6.2",
     "lucide-react": "^0.484.0",

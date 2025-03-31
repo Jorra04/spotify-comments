@@ -4,6 +4,7 @@ import { getFirstValue } from "@/utils";
 import styles from "./styles.module.css";
 import { usePlayback } from "@/contexts";
 import { useCurrentTrackStore } from "@/stores";
+import { Tooltip } from "@mui/material";
 export default function Track({ item }) {
   if (!item) {
     console.log("+++item", item);
@@ -46,9 +47,14 @@ export default function Track({ item }) {
         </div>
 
         <div className={styles.trackInfo}>
-          <h3 className={styles.trackName}>{trackName}</h3>
+          <Tooltip title={trackName} arrow>
+            <h3 className={styles.trackName}>{trackName}</h3>
+          </Tooltip>
           <div className={styles.albumInfo}>
-            <h4 className={styles.artistName}>{artistName}</h4>
+            <Tooltip title={artistName} arrow>
+              <h4 className={styles.artistName}>{artistName}</h4>
+            </Tooltip>
+
             <span className={styles.divider}>•</span>
             <p className={styles.albumReleaseDate}>
               {getFirstValue(item?.album?.release_date)}

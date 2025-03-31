@@ -20,6 +20,7 @@ import NowPlaying from "./NowPlaying";
 import { useSpotifyApi } from "@/effects";
 import { millisToFormattedTime } from "@/utils/millisToFormattedTime";
 import { useAuthenticationStore, useCurrentTrackStore } from "@/stores";
+import { Slider } from "@mui/material";
 
 const track = {
   name: "",
@@ -259,22 +260,37 @@ export default function Playback() {
         </div>
         <div className={styles.playbackTimeContainer}>
           <span className={styles.playbackTime}>{formattedCurrentTime}</span>
-          <input
-            type="range"
-            min="0"
-            max={duration}
+          <Slider
+            defaultValue={0}
+            aria-label="playback seek"
             value={currentTime}
+            min={0}
+            max={duration}
             onChange={handleSeek}
-            className={styles.playbackSeek}
+            sx={{
+              color: "#1DB954", // Spotify green for the played section
+              "& .MuiSlider-thumb": {
+                color: "#1DB954", // Thumb color
+              },
+              "& .MuiSlider-rail": {
+                color: "#404040", // Unplayed section (rail)
+              },
+              "& .MuiSlider-track": {
+                color: "#1DB954", // Played section (track)
+              },
+              "&:hover .MuiSlider-thumb": {
+                boxShadow: "0 0 0 8px rgba(29,185,84,0.16)", // Thumb glow on hover
+              },
+            }}
           />
           <span className={styles.playbackTime}>{formattedDuration}</span>
         </div>
       </div>
       <div className={styles.audioPlaybackContainer}>
-        <MicVocal color="white" />
-        <ListMusic color="white" />
-        <MonitorSpeaker color="white" />
-        <Volume2 color="white" />
+        <MicVocal color="white" size={24} />
+        <ListMusic color="white" size={24} />
+        <MonitorSpeaker color="white" size={24} />
+        <Volume2 color="white" size={24} />
         <input
           type="range"
           min={VOLUME_MIN}
