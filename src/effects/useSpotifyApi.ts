@@ -1,4 +1,7 @@
+"use client";
 import { useSpotify } from "@/contexts";
+import { useAuthenticationStore } from "@/stores";
+import { useShallow } from "zustand/shallow";
 
 export interface SearchResult {
   artists: {
@@ -46,7 +49,7 @@ export interface SearchResult {
 }
 
 const useSpotifyApi = () => {
-  const { bearerToken } = useSpotify();
+  const { bearerToken } = useAuthenticationStore(useShallow((state) => state));
 
   const baseUrl = "https://api.spotify.com/v1";
 
@@ -142,17 +145,13 @@ const useSpotifyApi = () => {
     return normalizeSearchResults(data);
   };
 
-  const playSong = async (
-    trackUri: string,
-    deviceId: string,
-    accessToken: string
-  ) => {
+  const playSong = async (trackUri: string, deviceId: string) => {
     const response = await fetch(
       `${baseUrl}/me/player/play?device_id=${deviceId}`,
       {
         method: "PUT",
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${bearerToken}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -164,22 +163,7 @@ const useSpotifyApi = () => {
     return response;
   };
 
-  const pauseSong = async (deviceId: string, accessToken: string) => {
-    const response = await fetch(
-      `${baseUrl}/me/player/pause?device_id=${deviceId}`,
-      {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    return response;
-  };
-
-  return { search, playSong, pauseSong };
+  return { search, playSong };
 };
 
 export default useSpotifyApi;

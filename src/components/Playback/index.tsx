@@ -19,10 +19,7 @@ import { VOLUME_MIN, VOLUME_MAX, VOLUME_DEFAULT } from "@/constants";
 import NowPlaying from "./NowPlaying";
 import { useSpotifyApi } from "@/effects";
 import { millisToFormattedTime } from "@/utils/millisToFormattedTime";
-import { useCurrentTrackStore } from "@/stores";
-type PlaybackProps = {
-  accessToken: string;
-};
+import { useAuthenticationStore, useCurrentTrackStore } from "@/stores";
 
 const track = {
   name: "",
@@ -32,7 +29,7 @@ const track = {
   artists: [{ name: "" }],
 };
 
-export default function Playback({ accessToken }: PlaybackProps) {
+export default function Playback() {
   const [isPaused, setIsPaused] = useState(true);
   const [player, setPlayer] = useState<Spotify.Player | null>(null);
   const tokenRef = useRef<string | null>(null); // Store the latest token reference
@@ -40,7 +37,7 @@ export default function Playback({ accessToken }: PlaybackProps) {
   const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolume] = useState(VOLUME_DEFAULT);
   const [duration, setDuration] = useState(0);
-  const { playSong, pauseSong } = useSpotifyApi();
+  const { playSong } = useSpotifyApi();
 
   const { albumArt, title, artist, uri } = useCurrentTrackStore(
     useShallow((state) => ({
@@ -50,6 +47,8 @@ export default function Playback({ accessToken }: PlaybackProps) {
       uri: state.currentTrack?.uri,
     }))
   );
+
+  const { bearerToken } = useAuthenticationStore(useShallow((state) => state));
 
   const initializePlayer = async () => {
     if (!window.Spotify) {
@@ -99,7 +98,7 @@ export default function Playback({ accessToken }: PlaybackProps) {
 
   const handleComponentMount = async () => {
     // Store the token in ref to ensure it is always available
-    tokenRef.current = accessToken;
+    tokenRef.current = bearerToken;
 
     if (!window.Spotify) {
       console.log("+++ Loading Spotify SDK...");
@@ -118,14 +117,14 @@ export default function Playback({ accessToken }: PlaybackProps) {
   };
 
   useEffect(() => {
-    console.log("+++ Mounting component with accessToken:", accessToken);
+    console.log("+++ Mounting component with bearerToken:", bearerToken);
 
     handleComponentMount();
 
     return () => {
       player?.disconnect();
     };
-  }, [accessToken]);
+  }, [bearerToken]);
 
   useEffect(() => {
     // Initialize the interval
@@ -196,7 +195,7 @@ export default function Playback({ accessToken }: PlaybackProps) {
     try {
       console.log(`+++ Playing track: ${uri} on device ${deviceId}`);
 
-      const response = await playSong(uri, deviceId, accessToken);
+      const response = await playSong(uri, deviceId);
 
       if (!response.ok) {
         const error = await response.json();
