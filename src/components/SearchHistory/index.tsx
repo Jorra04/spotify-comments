@@ -13,9 +13,9 @@ export default function SearchHistory({
   console.log("+++searchHistory", searchHistory);
   return (
     <div className={styles.searchHistory}>
-      {searchHistory.map((search) => (
+      {searchHistory.map((search, index) => (
         <HistoryItem
-          key={search}
+          key={`search-${index}`}
           search={search}
           setSearchHistory={setSearchHistory}
         />
