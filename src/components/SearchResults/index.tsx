@@ -1,3 +1,4 @@
+"use client";
 import { useSearch } from "@/contexts";
 import { capitalize } from "@/utils";
 import styles from "./styles.module.css";
@@ -31,7 +32,7 @@ export default function SearchResults() {
       return `Search results for "${searchQuery}"`;
     }
     return "Search results";
-  }, [searchQuery]);
+  }, [searchResults]);
 
   return (
     <div className={styles.searchResultsContainer}>

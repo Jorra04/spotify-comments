@@ -1,3 +1,10 @@
+.nowPlayingButton {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
 .nowPlaying {
   display: flex;
   align-items: center;
@@ -8,6 +15,10 @@
   height: 50px;
   width: 50px;
   border-radius: 8px;
+  &:hover {
+    transition: all 500ms ease-in-out;
+    outline: 1px solid var(--spotify-green);
+  }
 }
 
 .nowPlayingInfo {
