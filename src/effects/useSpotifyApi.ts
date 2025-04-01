@@ -164,18 +164,7 @@ const useSpotifyApi = () => {
     return response;
   };
 
-  const getTrack = async (trackId: string) => {
-    const response = await fetch(`${baseUrl}/tracks/${trackId}`, {
-      headers: {
-        Authorization: `Bearer ${bearerToken}`,
-      },
-    });
-
-    const data = await response.json();
-    return data;
-  };
-
-  return { search, playSong, getTrack };
+  return { search, playSong };
 };
 
 export default useSpotifyApi;

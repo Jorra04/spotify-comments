@@ -16,6 +16,10 @@
   ); /* Add this to maintain visual distinction */
   color: white; /* Add this to ensure text is visible */
   outline: none; /* Remove the focus outline */
+
+  &::placeholder {
+    color: var(--spotify-white);
+  }
 }
 
 .searchButton {
@@ -25,6 +29,6 @@
   background-color: var(
     --spotify-light-gray
   ); /* Add this to maintain visual distinction */
-  color: white; /* Add this to ensure text is visible */
+  color: var(--spotify-white); /* Add this to ensure text is visible */
   flex: 0.2; /* Takes up remaining 30% of the space */
 }

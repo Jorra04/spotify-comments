@@ -27,13 +27,25 @@ export async function GET(request: Request) {
 
     const data = await response.json();
     const redirectUrl = new URL("/home", request.url);
+    const token = data.access_token;
     redirectUrl.search = new URLSearchParams({
-      access_token: data.access_token,
+      access_token: token,
     }).toString();
 
-    return NextResponse.redirect(redirectUrl, {
+    const responseObject = NextResponse.redirect(redirectUrl, {
       status: 302,
     });
+    // Store token in a secure, httpOnly cookie
+    responseObject.cookies.set({
+      name: "id_token",
+      value: token,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 60 * 60, // 1 hour expiry
+      path: "/",
+    });
+
+    return responseObject;
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to fetch from Spotify API" },
