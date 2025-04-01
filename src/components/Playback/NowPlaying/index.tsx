@@ -6,16 +6,18 @@ export type NowPlayingProps = {
   albumArtPath: string;
   title: string;
   artist: string;
+  id: string;
 };
 
 export default function NowPlaying({
   albumArtPath = "",
   title,
   artist,
+  id,
 }: NowPlayingProps) {
   const router = useRouter();
   const routeToTrack = () => {
-    router.push("/home/track");
+    router.push(`/home/track/${id}`);
   };
   return (
     <div className={styles.nowPlaying}>

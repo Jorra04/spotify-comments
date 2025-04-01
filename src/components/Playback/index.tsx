@@ -40,12 +40,13 @@ export default function Playback() {
   const [duration, setDuration] = useState(0);
   const { playSong } = useSpotifyApi();
 
-  const { albumArt, title, artist, uri } = useCurrentTrackStore(
+  const { albumArt, title, artist, uri, id } = useCurrentTrackStore(
     useShallow((state) => ({
       albumArt: state.currentTrack?.albumArt,
       title: state.currentTrack?.title,
       artist: state.currentTrack?.artist,
       uri: state.currentTrack?.uri,
+      id: state.currentTrack?.id,
     }))
   );
 
@@ -246,7 +247,12 @@ export default function Playback() {
   return (
     <div className={styles.playbackContainer}>
       <div className={styles.nowPlayingContainer}>
-        <NowPlaying albumArtPath={albumArt} title={title} artist={artist} />
+        <NowPlaying
+          albumArtPath={albumArt}
+          title={title}
+          artist={artist}
+          id={id}
+        />
       </div>
       <div className={styles.playbackControlsContainer}>
         <div className={styles.playbackControls}>

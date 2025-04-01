@@ -5,3 +5,5 @@ export { default as CategoryBar } from "./CategoryBar";
 export { default as SearchHistory } from "./SearchHistory";
 export { default as Playback } from "./Playback";
 export { default as CommentCardPopup } from "./CommentCardPopup";
+export { default as SideTray } from "./SideTray";
+export { default as TrackInfo } from "./TrackInfo";

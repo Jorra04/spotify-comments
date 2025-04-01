@@ -1,5 +1,5 @@
 "use client";
-import { Playback, SearchArea } from "@/components";
+import { Playback, SearchArea, SideTray } from "@/components";
 import { PlaybackProvider, SearchProvider } from "@/contexts";
 import { useQueryHandler } from "@/effects";
 import styles from "./styles.module.css";
@@ -15,7 +15,7 @@ export default function HomeLayout({
       <PlaybackProvider>
         <div className={styles.homeContainer}>
           <div className={styles.searchContainer}>
-            <SearchArea />
+            <SideTray />
             {children}
           </div>
           <div className={styles.playbackContainer}>

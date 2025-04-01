@@ -25,6 +25,7 @@ export default function Track({ item }) {
       albumArt: imagePath,
       title: trackName,
       artist: artistName,
+      id: item?.id,
     });
   };
 

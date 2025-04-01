@@ -1,17 +1,14 @@
-.searchContainer {
+.sideTrayContainer {
   display: flex;
   background-color: var(--spotify-dark-gray);
   flex-direction: column;
-  overflow: hidden;
+  padding: 20px;
+  border-radius: 16px;
 
-  .headerContainer {
+  .buttonContainer {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     width: 100%;
   }
-}
-
-.title {
-  color: white;
 }
