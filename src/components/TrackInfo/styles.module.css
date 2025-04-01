@@ -1,0 +1,47 @@
+.trackInfoContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.trackInfoHeader {
+  display: flex;
+  width: 100%;
+  gap: 32px;
+  color: var(--spotify-white);
+}
+
+.albumArtContainer {
+  width: 200px;
+  height: 200px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.albumArt {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.trackInfoDetails {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.trackInfoBody {
+  height: 100%;
+  background-color: var(--spotify-gray-blue);
+  border-radius: 16px;
+  padding: 32px;
+}
+
+.trackInfoArtist {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

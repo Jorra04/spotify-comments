@@ -23,6 +23,7 @@ export interface SearchResult {
         release_date: string;
       };
       uri: string;
+      id: string;
     }[];
   };
   albums: {
@@ -50,7 +51,6 @@ export interface SearchResult {
 
 const useSpotifyApi = () => {
   const { bearerToken } = useAuthenticationStore(useShallow((state) => state));
-
   const baseUrl = "https://api.spotify.com/v1";
 
   const normalizeSearchResults = (results: any): SearchResult => {
@@ -75,7 +75,7 @@ const useSpotifyApi = () => {
       },
       tracks: {
         items: trackItems?.map(
-          ({ name = "", artists = [], album = {}, uri = "" }) => ({
+          ({ name = "", artists = [], album = {}, uri = "", id = "" }) => ({
             name,
             artists: artists.map(({ name = "" }) => ({ name })),
             album: {
@@ -90,6 +90,7 @@ const useSpotifyApi = () => {
               release_date: album.release_date || "",
             },
             uri,
+            id,
           })
         ),
       },
@@ -163,7 +164,18 @@ const useSpotifyApi = () => {
     return response;
   };
 
-  return { search, playSong };
+  const getTrack = async (trackId: string) => {
+    const response = await fetch(`${baseUrl}/tracks/${trackId}`, {
+      headers: {
+        Authorization: `Bearer ${bearerToken}`,
+      },
+    });
+
+    const data = await response.json();
+    return data;
+  };
+
+  return { search, playSong, getTrack };
 };
 
 export default useSpotifyApi;
