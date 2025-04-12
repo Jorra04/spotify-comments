@@ -31,7 +31,7 @@ export default function TrackInfo({
           />
         </div>
         <div className={styles.trackInfoDetails}>
-          <h1>{title}</h1>
+          <h1 className={styles.trackInfoTitle}>{title}</h1>
           <div className={styles.trackInfoArtist}>
             <Chip
               avatar={

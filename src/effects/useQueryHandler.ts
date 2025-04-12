@@ -20,7 +20,7 @@ const useQueryHandler = () => {
     if (accessToken) {
       setBearerToken(accessToken);
       params.delete("access_token");
-      router.push(`/home?${params.toString()}`);
+      router.push(`/search?${params.toString()}`);
     }
   }, [searchParams, router]);
 };

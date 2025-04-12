@@ -26,7 +26,7 @@ export async function GET(request: Request) {
     });
 
     const data = await response.json();
-    const redirectUrl = new URL("/home", request.url);
+    const redirectUrl = new URL("/search", request.url);
     const token = data.access_token;
     redirectUrl.search = new URLSearchParams({
       access_token: token,

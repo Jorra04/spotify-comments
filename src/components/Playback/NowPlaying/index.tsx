@@ -17,7 +17,7 @@ export default function NowPlaying({
 }: NowPlayingProps) {
   const router = useRouter();
   const routeToTrack = () => {
-    router.push(`/home/track/${id}`);
+    router.push(`/search/track/${id}`);
   };
   return (
     <div className={styles.nowPlaying}>

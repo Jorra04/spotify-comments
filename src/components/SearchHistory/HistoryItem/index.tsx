@@ -1,7 +1,9 @@
+"use client";
 import { useSearchStore } from "@/stores";
 import styles from "./styles.module.css";
 import { X } from "lucide-react";
 import { useShallow } from "zustand/shallow";
+import { useRouter } from "next/navigation";
 
 interface HistoryItemProps {
   search: string;
@@ -19,6 +21,8 @@ export default function HistoryItem({
       setSearchQuery: state.setSearchQuery,
     }))
   );
+
+  const router = useRouter();
   const handleRemoveItem = () => {
     removeSearchHistory(search);
   };
@@ -26,6 +30,7 @@ export default function HistoryItem({
   const handleClick = () => {
     setSearchResults(result);
     setSearchQuery(search);
+    router.push(`/search`);
   };
 
   return (

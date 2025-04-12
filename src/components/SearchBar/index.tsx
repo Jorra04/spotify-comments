@@ -7,10 +7,11 @@ import styles from "./styles.module.css";
 import { useCallback } from "react";
 import { useSearchHistoryStore, useSearchStore } from "@/stores";
 import { useShallow } from "zustand/shallow";
+import { useRouter } from "next/navigation";
 
 export default function SearchBar() {
   const { search } = useSpotifyApi();
-
+  const router = useRouter();
   const { searchHistory, setSearchHistory } = useSearchHistoryStore(
     useShallow((state) => ({
       searchHistory: state.searchHistory,
@@ -30,6 +31,8 @@ export default function SearchBar() {
     const result = await search(searchQuery, {
       type: selectedCategories?.join(","),
     });
+
+    router.push(`/search`);
 
     const newHistory = [...searchHistory, { searchQuery, result }];
     setSearchHistory(newHistory);

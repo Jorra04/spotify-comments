@@ -60,6 +60,8 @@ export default async function Page({
     artistImages: artistImages[0]?.url,
   };
 
+  console.log("+++++props", props);
+
   return (
     <div className={styles.trackContainer}>
       <TrackInfo {...props} />
