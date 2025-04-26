@@ -9,12 +9,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import { InboxIcon, MailIcon } from "lucide-react";
-import { useEffect } from "react";
 export default function QueueTray({ isOpen, setIsOpen, queue = [] }) {
-  useEffect(() => {
-    console.log("+++ Queue:", queue);
-  }, [queue]);
-
   const list = (anchor: Anchor) => (
     <Box
       sx={{ width: anchor === "top" || anchor === "bottom" ? "auto" : 250 }}
