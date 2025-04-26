@@ -164,7 +164,17 @@ const useSpotifyApi = () => {
     return response;
   };
 
-  return { search, playSong };
+  const addToQueue = async (trackUri: string) => {
+    const response = await fetch(`${baseUrl}/me/player/queue?uri=${trackUri}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${bearerToken}`,
+        "Content-Type": "application/json",
+      },
+    });
+  };
+
+  return { search, playSong, addToQueue };
 };
 
 export default useSpotifyApi;

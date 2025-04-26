@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   try {
-    const scope = "streaming user-read-email user-read-private";
+    const scope = "streaming user-read-email user-read-private user-read-currently-playing user-read-playback-state";
 
     const state = generateRandomString(16);
 

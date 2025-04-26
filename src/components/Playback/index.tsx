@@ -1,7 +1,7 @@
 "use client";
 import cx from "classnames";
 import styles from "./styles.module.css";
-import { useEffect, useState, useRef, useMemo } from "react";
+import { useEffect, useState, useRef, useMemo, useCallback } from "react";
 import { useShallow } from "zustand/shallow";
 import {
   Play,
@@ -19,8 +19,9 @@ import { VOLUME_MIN, VOLUME_MAX, VOLUME_DEFAULT } from "@/constants";
 import NowPlaying from "./NowPlaying";
 import { useSpotifyApi } from "@/effects";
 import { millisToFormattedTime } from "@/utils/millisToFormattedTime";
-import { useAuthenticationStore, useCurrentTrackStore } from "@/stores";
+import { useAuthenticationStore, usePlaybackStateStore } from "@/stores";
 import { Slider } from "@mui/material";
+import QueueTray from "./QueueTray";
 
 const track = {
   name: "",
@@ -38,19 +39,63 @@ export default function Playback() {
   const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolume] = useState(VOLUME_DEFAULT);
   const [duration, setDuration] = useState(0);
+  const [isQueueOpen, setIsQueueOpen] = useState(false);
   const { playSong } = useSpotifyApi();
 
-  const { albumArt, title, artist, uri, id } = useCurrentTrackStore(
-    useShallow((state) => ({
-      albumArt: state.currentTrack?.albumArt,
-      title: state.currentTrack?.title,
-      artist: state.currentTrack?.artist,
-      uri: state.currentTrack?.uri,
-      id: state.currentTrack?.id,
-    }))
-  );
+  const { albumArt, title, artist, uri, id, setCurrentTrack, queue, setQueue } =
+    usePlaybackStateStore(
+      useShallow((state) => ({
+        albumArt: state.currentTrack?.albumArt,
+        title: state.currentTrack?.title,
+        artist: state.currentTrack?.artist,
+        uri: state.currentTrack?.uri,
+        id: state.currentTrack?.id,
+        setCurrentTrack: state.setCurrentTrack,
+        queue: state.queue,
+        setQueue: state.setQueue,
+      }))
+    );
 
   const { bearerToken } = useAuthenticationStore(useShallow((state) => state));
+
+  const playerReadyHandler = ({ device_id }: { device_id: string }) => {
+    console.log("+++ Player Ready with Device ID:", device_id);
+    setDeviceId(device_id);
+    setIsPaused(true);
+  };
+
+  const playerStateChangedHandler = (state: Spotify.PlaybackState) => {
+    console.log("+++ Player state changed:", state);
+    const { paused: _isPaused, position, duration: _duration } = state;
+    setCurrentTime(position ?? 0);
+    setDuration(_duration ?? 0);
+    setIsPaused(_isPaused ?? true);
+
+    if (
+      state?.track_window?.current_track?.uri &&
+      uri !== state.track_window.current_track.uri
+    ) {
+      const {
+        name,
+        uri: newTrackURI,
+        album: newTrackAlbum,
+        artists: newTrackArtists,
+        id: newTrackId,
+      } = state.track_window.current_track;
+      const imagePath =
+        newTrackAlbum?.images[0]?.url || "/assets/albumPlaceholder.svg";
+      const artistName = newTrackArtists
+        ?.map((artist) => artist.name)
+        .join(", ");
+      setCurrentTrack({
+        uri: newTrackURI,
+        albumArt: imagePath,
+        title: name,
+        artist: artistName,
+        id: newTrackId,
+      });
+    }
+  };
 
   const initializePlayer = async () => {
     if (!window.Spotify) {
@@ -75,26 +120,16 @@ export default function Playback() {
       setVolume(volume_percentage);
     });
 
-    tempPlayer.addListener("ready", ({ device_id }) => {
-      console.log("+++ Player Ready with Device ID:", device_id);
-      setDeviceId(device_id);
-      setIsPaused(true);
-    });
+    tempPlayer.addListener("ready", playerReadyHandler);
 
-    tempPlayer.addListener("player_state_changed", (state) => {
-      console.log("+++ Player state changed:", state);
-      setCurrentTime(state?.position ?? 0);
-      setDuration(state?.duration ?? 0);
-      setIsPaused(state?.paused ?? true);
-    });
+    tempPlayer.addListener("player_state_changed", playerStateChangedHandler);
 
     const success = await tempPlayer.connect();
-
     if (success) {
-      console.log("+++ Connected to Spotify!");
+      console.log("+++ Player connected successfully");
       setPlayer(tempPlayer);
     } else {
-      console.log("+++ Failed to connect!");
+      console.error("+++ Failed to connect to Spotify");
     }
   };
 
@@ -232,6 +267,18 @@ export default function Playback() {
   );
 
   useEffect(() => {
+    if (player) {
+      player.addListener("ready", playerReadyHandler);
+      player.addListener("player_state_changed", playerStateChangedHandler);
+    }
+
+    return () => {
+      player?.removeListener("ready", playerReadyHandler);
+      player?.removeListener("player_state_changed", playerStateChangedHandler);
+    };
+  }, [player, playerStateChangedHandler]);
+
+  useEffect(() => {
     if (uri && deviceId) {
       player?.getCurrentState().then((state) => {
         if (!state) {
@@ -294,7 +341,11 @@ export default function Playback() {
       </div>
       <div className={styles.audioPlaybackContainer}>
         <MicVocal color="white" size={24} />
-        <ListMusic color="white" size={24} />
+        <ListMusic
+          color="white"
+          size={24}
+          onClick={() => setIsQueueOpen(true)}
+        />
         <MonitorSpeaker color="white" size={24} />
         <Volume2 color="white" size={24} />
         <input
@@ -306,6 +357,11 @@ export default function Playback() {
           className={styles.volumeSlider}
         />
       </div>
+      <QueueTray
+        isOpen={isQueueOpen}
+        setIsOpen={setIsQueueOpen}
+        queue={queue}
+      />
     </div>
   );
 }

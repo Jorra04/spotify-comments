@@ -1,4 +1,5 @@
-.trackButton {
+.trackButton,
+.optionsButton {
   background: none;
   border: none;
   padding: 0;
@@ -6,13 +7,12 @@
   text-align: left;
   cursor: pointer;
 }
-
 .trackContainer {
   background-color: var(--spotify-light-gray);
   padding: 16px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 120px; /* Ensure items don't grow beyond 200px */
+  max-width: 124px; /* Ensure items don't grow beyond 200px */
   width: 100%; /* Let items use available space up to max-width */
   margin: 0 auto;
 
@@ -45,26 +45,37 @@
   .albumInfo {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 8px;
+    margin-top: 8px;
 
     .divider {
-      margin: 8px 0 0;
+      margin: 0;
       color: var(--white);
     }
 
     .artistName {
+      margin: 0;
       font-size: 12px;
       color: var(--spotify-gray);
-      margin: 8px 0 0;
       white-space: nowrap; /* Prevents wrapping */
       overflow: hidden; /* Hides overflow content */
       text-overflow: ellipsis; /* Adds ellipsis to overflow */
+      flex-grow: 0;
     }
 
     .albumReleaseDate {
+      margin: 0;
       font-size: 12px;
       color: var(--spotify-gray);
-      margin: 8px 0 0;
+      flex-grow: 0;
+    }
+
+    .optionsContainer {
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
     }
   }
 }
