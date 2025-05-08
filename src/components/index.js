@@ -7,3 +7,4 @@ export { default as Playback } from "./Playback";
 export { default as CommentCardPopup } from "./CommentCardPopup";
 export { default as SideTray } from "./SideTray";
 export { default as TrackInfo } from "./TrackInfo";
+export { default as AlbumInfo } from "./AlbumInfo";

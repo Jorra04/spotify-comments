@@ -1,3 +1,4 @@
+import { AlbumInfo } from "@/components";
 import styles from "./styles.module.css";
 import { cookies } from "next/headers";
 
@@ -22,21 +23,28 @@ export default async function Page({
 
   const albumData = await albumResponse.json();
 
-  const tracks = albumData.tracks.items;
+  const trackList = albumData.tracks?.items;
   const totalTracks = albumData.total_tracks;
   const albumArt = albumData.images[0]?.url;
-  const albumName = albumData.name;
-  const albumReleaseData = albumData.release_date;
+  const albumTitle = albumData.name;
+  const releaseDate = albumData.release_date;
+  const numberOfSongs = trackList?.length;
+  const artistName = albumData.artists[0]?.name;
 
-  console.log("+++ albumresponse", tracks);
+  console.log("+++ tracklist", trackList);
+
+  const props = {
+    albumArt,
+    releaseDate,
+    albumTitle,
+    numberOfSongs,
+    trackList,
+    artistName,
+  };
 
   return (
     <div className={styles.trackContainer}>
-      {tracks.map((track) => track.name)}
-      <p>{totalTracks}</p>
-      <p>{albumArt}</p>
-      <p>{albumName}</p>
-      <p>{albumReleaseData}</p>
+      <AlbumInfo {...props} />
     </div>
   );
 }

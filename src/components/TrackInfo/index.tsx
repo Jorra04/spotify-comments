@@ -3,6 +3,16 @@ import styles from "./styles.module.css";
 import { Avatar, Chip, Skeleton, Tooltip } from "@mui/material";
 import { formatFollowers, dateToEngString, timeToEngString } from "@/utils";
 
+interface TrackInfoProps {
+  albumArt: string;
+  title: string;
+  artist: string;
+  releaseDate: string;
+  duration: string;
+  totalFollowers: number;
+  artistImages: string;
+}
+
 export default function TrackInfo({
   albumArt,
   title,
@@ -11,15 +21,7 @@ export default function TrackInfo({
   duration,
   totalFollowers,
   artistImages,
-}: {
-  albumArt: string;
-  title: string;
-  artist: string;
-  releaseDate: string;
-  duration: string;
-  totalFollowers: number;
-  artistImages: string;
-}) {
+}: TrackInfoProps) {
   return (
     <div className={styles.trackInfoContainer}>
       <div className={styles.trackInfoHeader}>

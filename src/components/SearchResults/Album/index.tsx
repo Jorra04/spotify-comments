@@ -14,7 +14,7 @@ export default function Album({ item }) {
   );
 
   const handleClick = () => {
-    router.push(`/search/artist/${item?.id}`);
+    router.push(`/search/album/${item?.id}`);
   };
 
   return (
