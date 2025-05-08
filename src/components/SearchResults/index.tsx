@@ -4,6 +4,7 @@ import { capitalize } from "@/utils";
 import styles from "./styles.module.css";
 import Track from "./Track";
 import Artist from "./Artist";
+import Album from "./Album";
 import cx from "classnames";
 import { useMemo } from "react";
 import { useSearchStore } from "@/stores";
@@ -24,6 +25,8 @@ export default function SearchResults() {
       return <Track key={`${item.id}-${index}-track`} item={item} />;
     } else if (category === "artist") {
       return <Artist key={`${item.id}-${index}-artist`} item={item} />;
+    } else if (category === "album") {
+      return <Album key={`${item.id}-${index}-artist`} item={item} />;
     }
   };
 
@@ -47,6 +50,7 @@ export default function SearchResults() {
               className={cx(styles.categoryData, {
                 [styles.tracks]: category === "track",
                 [styles.artists]: category === "artist",
+                [styles.albums]: category === "album",
               })}
             >
               {searchResults[resultMap[category]]?.items.map((item, index) => {

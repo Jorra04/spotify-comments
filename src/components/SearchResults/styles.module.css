@@ -15,6 +15,10 @@
   &.artists {
     grid-template-columns: repeat(4, 1fr);
   }
+
+  &.albums {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 .searchResultsContainer {
   display: flex;

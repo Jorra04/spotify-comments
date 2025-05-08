@@ -101,6 +101,7 @@ const useSpotifyApi = () => {
             images = [],
             release_date = "",
             total_tracks = 0,
+            id,
           }) => ({
             name,
             images: images.map(({ url = "", height = 0, width = 0 }) => ({
@@ -110,6 +111,7 @@ const useSpotifyApi = () => {
             })),
             release_date: release_date || "",
             total_tracks: total_tracks || 0,
+            id,
           })
         ),
       },
@@ -128,7 +130,6 @@ const useSpotifyApi = () => {
       //       })) || [],
       // },
     };
-    console.log("+++", normalizedResults);
     return normalizedResults;
   };
 
