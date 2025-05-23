@@ -12,6 +12,7 @@ import {
   MonitorSpeaker,
   ListMusic,
   Volume2,
+  VolumeOff,
 } from "lucide-react";
 import { usePlayback } from "@/contexts";
 import { loadSpotifyPlayer } from "@/utils";
@@ -40,6 +41,8 @@ export default function Playback() {
   const [volume, setVolume] = useState(VOLUME_DEFAULT);
   const [duration, setDuration] = useState(0);
   const [isQueueOpen, setIsQueueOpen] = useState(false);
+
+  const [isMuted, setIsMuted] = useState(false);
   const { playSong } = useSpotifyApi();
 
   const { albumArt, title, artist, uri, id, setCurrentTrack, queue, setQueue } =
@@ -57,6 +60,15 @@ export default function Playback() {
     );
 
   const { bearerToken } = useAuthenticationStore(useShallow((state) => state));
+
+  const handleMutePressed = () => {
+    setIsMuted((muted) => {
+      const newVolume = muted ? VOLUME_DEFAULT : 0;
+      setVolume(newVolume);
+      player?.setVolume(newVolume / 100);
+      return !muted;
+    });
+  };
 
   const playerReadyHandler = ({ device_id }: { device_id: string }) => {
     console.log("+++ Player Ready with Device ID:", device_id);
@@ -252,7 +264,9 @@ export default function Playback() {
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = parseInt(e.target.value);
+    console.log("+++newvolume", newVolume, newVolume > 1);
     player?.setVolume(newVolume / 100);
+    setIsMuted(newVolume <= 0);
     setVolume(newVolume);
   };
 
@@ -347,7 +361,12 @@ export default function Playback() {
           onClick={() => setIsQueueOpen(true)}
         />
         <MonitorSpeaker color="white" size={24} />
-        <Volume2 color="white" size={24} />
+        {isMuted ? (
+          <VolumeOff color="white" size={24} onClick={handleMutePressed} />
+        ) : (
+          <Volume2 color="white" size={24} onClick={handleMutePressed} />
+        )}
+
         <input
           type="range"
           min={VOLUME_MIN}
