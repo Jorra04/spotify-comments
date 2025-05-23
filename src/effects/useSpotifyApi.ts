@@ -34,19 +34,6 @@ export interface SearchResult {
       total_tracks: number;
     }[];
   };
-  playlists: {
-    items: {
-      name: string;
-      images: { url: string; height: number; width: number }[];
-      owner: {
-        display_name: string;
-      };
-      description: string;
-      tracks: {
-        total: number;
-      };
-    }[];
-  };
 }
 
 const useSpotifyApi = () => {
@@ -58,7 +45,6 @@ const useSpotifyApi = () => {
       artists: { items: artistItems = [] } = { items: [] },
       tracks: { items: trackItems = [] } = { items: [] },
       albums: { items: albumItems = [] } = { items: [] },
-      playlists: { items: playlistItems = [] } = { items: [] },
     } = results;
 
     const normalizedResults = {
@@ -115,20 +101,6 @@ const useSpotifyApi = () => {
           })
         ),
       },
-      // playlists: {
-      //   items:
-      //     playlistItems
-      //       ?.filter((item) => !!item)
-      //       .map(({ name = "", images = [], owner = {} }) => ({
-      //         name,
-      //         images: images.map(({ url = "", height = 0, width = 0 }) => ({
-      //           url,
-      //           height,
-      //           width,
-      //         })),
-      //         owner: owner.display_name || "",
-      //       })) || [],
-      // },
     };
     return normalizedResults;
   };

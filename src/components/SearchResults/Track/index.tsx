@@ -49,14 +49,6 @@ export default function Track({ item }) {
   const options = useMemo(
     () => [
       {
-        label: "Add to playlist",
-        onClick: (e: React.MouseEvent<HTMLElement>) => {
-          e.stopPropagation();
-          console.log("add to playlist");
-          handleClose();
-        },
-      },
-      {
         label: "Add to queue",
         onClick: async (e: React.MouseEvent<HTMLElement>) => {
           e.stopPropagation();
